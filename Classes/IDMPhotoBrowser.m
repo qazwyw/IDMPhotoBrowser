@@ -598,8 +598,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneButton setFrame:[self frameForDoneButtonAtOrientation:currentOrientation]];
     [_doneButton setAlpha:1.0f];
-    [_doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-
+    [_doneButton addTarget:self action:@selector(deleteButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    _doneButtonImage=[UIImage imageNamed:@"IDMPhotoBrowser.bundle/images/IDMPhotoBrowser_delete.png"];
     if(!_doneButtonImage) {
         [_doneButton setTitleColor:[UIColor colorWithWhite:0.9 alpha:0.9] forState:UIControlStateNormal|UIControlStateHighlighted];
         [_doneButton setTitle:IDMPhotoBrowserLocalizedStrings(@"Done") forState:UIControlStateNormal];
@@ -1257,7 +1257,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 
 #pragma mark - Buttons
-
+#pragma mark 退出预览界面
 - (void)doneButtonPressed:(id)sender {
 
     if ([_delegate respondsToSelector:@selector(willDisappearPhotoBrowser:)]) {
@@ -1273,6 +1273,22 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         [self prepareForClosePhotoBrowser];
         [self dismissPhotoBrowserAnimated:YES];
     }
+}
+
+#pragma mark 删除
+-(void)deleteButtonPressed:(id)sender{
+    
+        if (_photos.count>1) {
+            NSLog(@"删除第%d张",_currentPageIndex);
+            [_photos removeObjectAtIndex:_currentPageIndex];
+            if (_currentPageIndex>=_photos.count-1) {
+                _currentPageIndex=_currentPageIndex>0?(_currentPageIndex-1):0;
+            }
+            [self reloadData];
+        }else{
+            [self doneButtonPressed:sender];
+        }
+   
 }
 
 - (void)actionButtonPressed:(id)sender {
