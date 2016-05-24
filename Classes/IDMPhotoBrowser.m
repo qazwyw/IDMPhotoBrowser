@@ -657,7 +657,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                   target:self
                                                                   action:@selector(actionButtonPressed:)];
-
+    
     // Gesture
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     [_panGesture setMinimumNumberOfTouches:1];
@@ -1277,19 +1277,31 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 #pragma mark 删除
 -(void)deleteButtonPressed:(id)sender{
-        if (_photos.count>0) {
-            [_photos removeObjectAtIndex:_currentPageIndex];
-            if (_currentPageIndex>=_photos.count-1) {
-                _currentPageIndex=_currentPageIndex>0?(_currentPageIndex-1):0;
+    if (_photos.count>0) {
+        id photo = _photos[_currentPageIndex];
+        [photo unloadUnderlyingImage];
+        [_photos removeObjectAtIndex:_currentPageIndex];
+        NSInteger pageIndex;
+        for (IDMZoomingScrollView *page in _visiblePages) {
+            pageIndex = PAGE_INDEX(page);
+            if (pageIndex == _currentPageIndex) {
+                [_recycledPages addObject:page];
+                [page prepareForReuse];
+                [page removeFromSuperview];
+                IDMLog(@"Removed page at index %i", PAGE_INDEX(page));
             }
-            [self reloadData];
-            if ([_delegate respondsToSelector:@selector(photoBrowser:didDeletePhotoAtIndex:)]) {
-                [_delegate photoBrowser:self didDeletePhotoAtIndex:_currentPageIndex];
-            }
-        }else{
-            [self doneButtonPressed:sender];
         }
-   
+        if (_currentPageIndex>=_photos.count-1) {
+            _currentPageIndex=_currentPageIndex>0?(_currentPageIndex-1):0;
+        }
+        [self reloadData];
+        if ([_delegate respondsToSelector:@selector(photoBrowser:didDeletePhotoAtIndex:)]) {
+            [_delegate photoBrowser:self didDeletePhotoAtIndex:_currentPageIndex];
+        }
+    }else{
+        [self doneButtonPressed:sender];
+    }
+    
 }
 
 - (void)actionButtonPressed:(id)sender {
