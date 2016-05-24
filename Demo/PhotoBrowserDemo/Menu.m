@@ -268,6 +268,10 @@
     NSLog(@"Will dismiss photoBrowser with photo index: %zu, photo caption: %@", pageIndex, photo.caption);
 }
 
+-(void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDeletePhotoAtIndex:(NSUInteger)index{
+
+}
+
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissAtPageIndex:(NSUInteger)pageIndex
 {
     id <IDMPhoto> photo = [photoBrowser photoAtIndex:pageIndex];

@@ -1277,14 +1277,15 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 #pragma mark 删除
 -(void)deleteButtonPressed:(id)sender{
-    
         if (_photos.count>1) {
-            NSLog(@"删除第%d张",_currentPageIndex);
             [_photos removeObjectAtIndex:_currentPageIndex];
             if (_currentPageIndex>=_photos.count-1) {
                 _currentPageIndex=_currentPageIndex>0?(_currentPageIndex-1):0;
             }
             [self reloadData];
+            if ([_delegate respondsToSelector:@selector(photoBrowser:didDeletePhotoAtIndex:)]) {
+                [_delegate photoBrowser:self didDeletePhotoAtIndex:_currentPageIndex];
+            }
         }else{
             [self doneButtonPressed:sender];
         }
