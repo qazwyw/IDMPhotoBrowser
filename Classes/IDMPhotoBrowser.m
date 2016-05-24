@@ -1277,7 +1277,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 #pragma mark 删除
 -(void)deleteButtonPressed:(id)sender{
-        if (_photos.count>1) {
+        if (_photos.count>0) {
             [_photos removeObjectAtIndex:_currentPageIndex];
             if (_currentPageIndex>=_photos.count-1) {
                 _currentPageIndex=_currentPageIndex>0?(_currentPageIndex-1):0;
