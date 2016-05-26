@@ -1294,7 +1294,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         if (_currentPageIndex>=_photos.count-1) {
             _currentPageIndex=_currentPageIndex>0?(_currentPageIndex-1):0;
         }
-        [self reloadData];
+        if (_photos.count>0) {
+            [self reloadData];
+        }
         if ([_delegate respondsToSelector:@selector(photoBrowser:didDeletePhotoAtIndex:)]) {
             [_delegate photoBrowser:self didDeletePhotoAtIndex:_currentPageIndex];
         }
