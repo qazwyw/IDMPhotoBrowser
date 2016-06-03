@@ -1299,6 +1299,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         }
         if ([_delegate respondsToSelector:@selector(photoBrowser:didDeletePhotoAtIndex:)]) {
             [_delegate photoBrowser:self didDeletePhotoAtIndex:_currentPageIndex];
+            if (_photos.count<1) {
+                [self doneButtonPressed:sender];
+            }
         }
     }else{
         [self doneButtonPressed:sender];
