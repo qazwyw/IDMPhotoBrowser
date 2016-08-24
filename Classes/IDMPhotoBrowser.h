@@ -71,7 +71,7 @@
 - (id)initWithPhotos:(NSArray *)photosArray;
 
 // Init (animated)
-- (id)initWithPhotos:(NSArray *)photosArray animatedFromView:(UIView*)view;
+- (id)initWithPhotos:(NSArray *)photosArray animatedFromView:(UIView*)view canDelete:(BOOL)canDelete;
 
 // Init with NSURL objects
 - (id)initWithPhotoURLs:(NSArray *)photoURLsArray;
